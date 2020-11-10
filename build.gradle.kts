@@ -27,7 +27,7 @@ plugins {
 }
 
 group = "com.github.patrick-mc"
-version = "1.0"
+version = requireNotNull(properties["version"])
 
 val kebabRegex = "-[a-z]".toRegex()
 val relocations = setOf(
