@@ -45,8 +45,6 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.ow2.asm:asm:9.0")
 
-    implementation("org.junit.platform:junit-platform-launcher:1.7.0")
-
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
 }

@@ -56,5 +56,8 @@ jobs:
       - name: "Upload Artifacts"
         uses: actions/upload-artifact@v2
         with:
-          name: "Package"
-          path: ~/.m2/repository/com/github/patrick-mc/${{ github.event.repository.name }}/${{ steps.version.outputs.value }}
+          name: ${{ github.event.repository.name }}-${{ steps.version.outputs.value }}-${{ github.sha }}
+          path: |
+            ~/.m2/repository/com/github/patrick-mc/${{ github.event.repository.name }}/${{ steps.version.outputs.value }}
+            LICENSE
+            README.md
