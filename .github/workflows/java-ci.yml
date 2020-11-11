@@ -53,28 +53,23 @@ jobs:
           path: "gradle.properties"
           property: "version"
 
-      - name: "Upload Build Output"
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ github.event.repository.name }}-${{ steps.version.outputs.value }}-${{ github.sha }}
-          path: |
-            ~/.m2/repository/com/github/patrick-mc/${{ github.event.repository.name }}/${{ steps.version.outputs.value }}
-            ./LICENSE
-            ./README.md
-
-
       - name: "Copy Build Output"
         run: |
           cp -r ~/.m2/repository/com/github/patrick-mc/${{ github.event.repository.name }}/${{ steps.version.outputs.value }} ./artifacts
           cp ./LICENSE ./artifacts
           cp ./README.md ./artifacts
 
+      - name: "Upload Build Output"
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.event.repository.name }}-${{ steps.version.outputs.value }}-${{ github.sha }}
+          path: ./artifacts
+
       - name: "Upload Test Results"
         uses: actions/upload-artifact@v2
         with:
           name: ${{ github.event.repository.name }}-test-${{ steps.version.outputs.value }}-${{ github.sha }}
-          path: |
-            ./build/reports/tests/test
+          path: ./build/reports/tests/test
 
       - name: "Copy JaCoCo Coverage Exec"
         run: cp ./build/jacoco/test.exec ./build/reports/jacoco
