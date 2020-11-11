@@ -67,16 +67,16 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}-test-${{ steps.version.outputs.value }}-${{ github.sha }}
           path: |
-            /build/reports/tests/test
-            LICENSE
-            README.md
+            ./build/reports/tests/test
+            ./LICENSE
+            ./README.md
 
       - name: "Upload JaCoCo Results"
         uses: actions/upload-artifact@v2
         with:
           name: ${{ github.event.repository.name }}-jacoco-${{ steps.version.outputs.value }}-${{ github.sha }}
           path: |
-            /build/jacoco/text.exec
-            /build/reports/jacoco
-            LICENSE
-            README.md
+            ./build/jacoco/text.exec
+            ./build/reports/jacoco
+            ./LICENSE
+            ./README.md
