@@ -23,5 +23,6 @@ import org.objectweb.asm.Opcodes
 
 object LearnASM {
     @JvmStatic
-    val version: String = Opcodes::class.java.`package`.implementationVersion
+    val version: String
+        get() = Opcodes::class.java.`package`.implementationVersion
 }
