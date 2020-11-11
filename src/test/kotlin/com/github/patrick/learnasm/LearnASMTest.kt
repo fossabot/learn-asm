@@ -51,7 +51,7 @@ class HelloWorldTest {
     @Test
     fun testHelloWorld() {
         assertDoesNotThrow {
-            HelloWorld.run()
+            HelloWorld.main(emptyArray())
         }
 
         assertEquals("Hello World!", testOutStream.toString().trim())

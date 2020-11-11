@@ -20,66 +20,105 @@
 package com.github.patrick.learnasm.sources
 
 import org.objectweb.asm.ClassWriter
-import org.objectweb.asm.Opcodes.*
-import java.io.File
+import org.objectweb.asm.Label
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
+
 
 class HelloWorld {
     companion object : ClassLoader() {
         @JvmStatic
-        fun run() {
-            main(emptyArray())
-        }
-
-        @JvmStatic
         fun main(args: Array<String>) {
             val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
+            var methodVisitor: MethodVisitor
 
-            classWriter.visit(
-                    V1_8,
-                    ACC_PUBLIC,
-                    "com/github/patrick/learnasm/build/HelloWorld",
-                    null,
-                    "java/lang/Object",
-                    null
-            )
+            // <init>
+            run {
+                classWriter.visit(
+                        Opcodes.V1_8,
+                        Opcodes.ACC_PUBLIC,
+                        "com/github/patrick/learnasm/build/HelloWorld",
+                        null,
+                        "java/lang/Object",
+                        null
+                )
 
-            val methodVisitor = classWriter.visitMethod(
-                    ACC_PUBLIC + ACC_STATIC,
-                    "main",
-                    "([Ljava/lang/String;)V",
-                    null,
-                    null
-            )
+                methodVisitor = classWriter.visitMethod(
+                        Opcodes.ACC_PUBLIC,
+                        "<init>",
+                        "()V",
+                        null,
+                        null
+                )
 
-            methodVisitor.visitFieldInsn(
-                    GETSTATIC,
-                    "java/lang/System",
-                    "out",
-                    "Ljava/io/PrintStream;"
-            )
+                methodVisitor.visitVarInsn(Opcodes.ALOAD, 0)
 
-            methodVisitor.visitLdcInsn(
-                    "Hello World!"
-            )
+                methodVisitor.visitMethodInsn(
+                        Opcodes.INVOKESPECIAL,
+                        "java/lang/Object",
+                        "<init>",
+                        "()V",
+                        false
+                )
 
-            methodVisitor.visitMethodInsn(
-                    INVOKEVIRTUAL,
-                    "java/io/PrintStream",
-                    "println",
-                    "(Ljava/lang/String;)V",
-                    false
-            )
+                methodVisitor.visitInsn(Opcodes.RETURN)
+                methodVisitor.visitMaxs(0, 0)
+                methodVisitor.visitEnd()
+            }
 
-            methodVisitor.visitInsn(
-                    RETURN
-            )
+            // main
+            run {
+                methodVisitor = classWriter.visitMethod(
+                        Opcodes.ACC_PUBLIC + Opcodes.ACC_STATIC,
+                        "main",
+                        "([Ljava/lang/String;)V",
+                        null,
+                        null
+                )
 
-            methodVisitor.visitMaxs(
-                    0,
-                    0
-            )
+                methodVisitor.visitParameterAnnotation(
+                        0,
+                        "Lorg.jetbrains.annotations.NotNull;",
+                        false
+                )
 
-            methodVisitor.visitEnd()
+                val start = Label()
+                methodVisitor.visitLabel(start)
+
+                methodVisitor.visitFieldInsn(
+                        Opcodes.GETSTATIC,
+                        "java/lang/System",
+                        "out",
+                        "Ljava/io/PrintStream;"
+                )
+
+                methodVisitor.visitLdcInsn("Hello World!")
+
+                methodVisitor.visitMethodInsn(
+                        Opcodes.INVOKEVIRTUAL,
+                        "java/io/PrintStream",
+                        "println",
+                        "(Ljava/lang/String;)V",
+                        false
+                )
+
+                methodVisitor.visitInsn(Opcodes.RETURN)
+
+                val end = Label()
+                methodVisitor.visitLabel(end)
+
+                methodVisitor.visitLocalVariable(
+                        "args",
+                        "[Ljava/lang/String;",
+                        null,
+                        start,
+                        end,
+                        0
+                )
+
+                methodVisitor.visitMaxs(0, 0)
+                methodVisitor.visitEnd()
+            }
 
             val bytes = classWriter.toByteArray()
             val clazz = defineClass(
@@ -89,7 +128,7 @@ class HelloWorld {
                     bytes.count()
             )
 
-            clazz.getDeclaredMethod("main", Array<String>::class.java).invoke(null, null)
+            clazz.getDeclaredMethod("main", Array<String>::class.java).invoke(null, emptyArray<String>())
         }
     }
 }
