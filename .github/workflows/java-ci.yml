@@ -65,7 +65,7 @@ jobs:
 
       - name: "Copy Build Output"
         run: |
-          cp ~/.m2/repository/com/github/patrick-mc/${{ github.event.repository.name }}/${{ steps.version.outputs.value }} ./artifacts
+          cp -r ~/.m2/repository/com/github/patrick-mc/${{ github.event.repository.name }}/${{ steps.version.outputs.value }} ./artifacts
           cp ./LICENSE ./artifacts
           cp ./README.md ./artifacts
 
