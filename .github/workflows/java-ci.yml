@@ -77,7 +77,7 @@ jobs:
             ./build/reports/tests/test
 
       - name: "Copy JaCoCo Coverage Exec"
-        run: cp ./build/jacoco/text.exec ./build/reports/jacoco
+        run: cp ./build/jacoco/test.exec ./build/reports/jacoco
 
       - name: "Upload JaCoCo Results"
         uses: actions/upload-artifact@v2
