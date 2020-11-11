@@ -21,6 +21,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    jacoco
     `maven-publish`
     kotlin("jvm") version "1.4.10"
     id("com.github.johnrengelman.shadow") version "6.1.0"
@@ -45,6 +46,8 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.ow2.asm:asm:9.0")
 
+    testImplementation("org.jacoco:org.jacoco.agent:0.8.6")
+
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
 }
@@ -56,10 +59,35 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+
+        finalizedBy(jacocoTestReport)
+    }
+
+    withType<JacocoReport> {
+        dependsOn(test)
+        dependsOn(jacocoTestCoverageVerification)
+
+        reports {
+            csv.isEnabled = false
+            html.isEnabled = true
+            xml.isEnabled = true
+            html.destination = file("${buildDir}/reports/jacoco")
+            xml.destination = file("${buildDir}/reports/jacoco/jacoco.xml")
+        }
+    }
+
+    withType<JacocoCoverageVerification> {
+        violationRules {
+            rule {
+                limit {
+                    minimum = "0.8".toBigDecimal()
+                }
+            }
+        }
     }
 
     withType<AbstractPublishToMaven> {
-        dependsOn(test)
+        dependsOn(jacocoTestReport)
     }
 
     withType<ShadowJar> {
@@ -78,6 +106,10 @@ tasks {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
     }
+}
+
+jacoco {
+    toolVersion = "0.8.6"
 }
 
 publishing {

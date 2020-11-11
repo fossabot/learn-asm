@@ -38,3 +38,6 @@ cache:
 
 install:
   - ./gradlew clean publishToMavenLocal
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

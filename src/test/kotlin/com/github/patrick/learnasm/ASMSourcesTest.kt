@@ -30,7 +30,7 @@ import kotlin.test.assertEquals
 
 
 @Suppress("unused")
-class HelloWorldTest {
+class ASMSourcesTest {
     private val testOutStream = ByteArrayOutputStream()
     private val testErrStream = ByteArrayOutputStream()
     private val outStream = System.out

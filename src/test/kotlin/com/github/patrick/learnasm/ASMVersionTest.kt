@@ -19,9 +19,15 @@
 
 package com.github.patrick.learnasm
 
-import org.objectweb.asm.Opcodes
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
-object LearnASM {
-    @JvmStatic
-    val version: String = Opcodes::class.java.`package`.implementationVersion
+@Suppress("unused")
+class ASMVersionTest {
+    @Test
+    fun testASMVersion() {
+        val version = LearnASM.version
+
+        assertEquals("9.0", version)
+    }
 }
